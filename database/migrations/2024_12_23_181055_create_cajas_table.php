@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cajas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->foreignId('sucursal_id')->constrained('sucursals')->onDelete('cascade');
+            $table->foreignId('sucursal_id')->onDelete('cascade');
             $table->boolean('estado');
             $table->timestamps();
         });

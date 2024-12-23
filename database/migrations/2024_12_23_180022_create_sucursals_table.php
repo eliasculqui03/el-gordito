@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sucursals', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->foreignId('empresa_id')->constrained('empresas')->onDelete('cascade');
+            $table->foreignId('empresa_id')->onDelete('cascade');
             $table->string('tipo_establecimiento');
             $table->string('fecha_inicio_operaciones');
             $table->string('fecha_final_operaciones')->nullable();
