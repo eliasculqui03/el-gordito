@@ -17,18 +17,24 @@ class EmpresaResource extends Resource
 {
     protected static ?string $model = Empresa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('tipo_actividad')
-                    ->required()
-                    ->maxLength(255),
+
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('tipo_actividad')
+                    ->required()
+                    ->options(
+                        [
+                            'Servicios' => 'Servicios',
+                            'Otros' => 'Otros'
+                        ]
+                    ),
                 Forms\Components\TextInput::make('ruc')
                     ->required()
                     ->maxLength(255),
@@ -38,9 +44,12 @@ class EmpresaResource extends Resource
                 Forms\Components\TextInput::make('numero_decreto')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('logo')
+                Forms\Components\FileUpload::make('logo')
+
                     ->required()
-                    ->maxLength(255),
+                    ->directory('image')
+                    ->image()
+                    ->maxSize(1024),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
@@ -89,9 +98,9 @@ class EmpresaResource extends Resource
                 Forms\Components\TextInput::make('direccion_gerente')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('fecha_ingreso_gerente')
+                Forms\Components\DatePicker::make('fecha_ingreso_gerente')
                     ->required()
-                    ->maxLength(255),
+
             ]);
     }
 
@@ -99,9 +108,10 @@ class EmpresaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('tipo_actividad')
-                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('nombre')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tipo_actividad')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('ruc')
                     ->searchable(),
@@ -151,11 +161,6 @@ class EmpresaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

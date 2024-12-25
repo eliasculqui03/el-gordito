@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Zona extends Model
 {
@@ -17,7 +18,7 @@ class Zona extends Model
     /**
      * Relación con el modelo Caja.
      */
-    public function caja()
+    public function caja(): BelongsTo
     {
         return $this->belongsTo(Caja::class);
     }

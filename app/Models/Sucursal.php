@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sucursal extends Model
 {
@@ -20,8 +22,13 @@ class Sucursal extends Model
         'correo',
     ];
 
-    public function empresa()
+    public function empresa(): BelongsTo
     {
         return $this->belongsTo(Empresa::class);
+    }
+
+    public function caja(): HasMany
+    {
+        return $this->hasMany(Caja::class);
     }
 }

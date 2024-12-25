@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ZonaResource\Pages;
-use App\Filament\Resources\ZonaResource\RelationManagers;
-use App\Models\Zona;
+use App\Filament\Resources\AreaResource\Pages;
+use App\Filament\Resources\AreaResource\RelationManagers;
+use App\Models\Area;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,23 +13,22 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ZonaResource extends Resource
+class AreaResource extends Resource
 {
-    protected static ?string $model = Zona::class;
+    protected static ?string $model = Area::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
+    protected static ?string $navigationIcon = 'heroicon-o-fire';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('caja_id')
-                    ->relationship('caja', 'nombre', fn($query) => $query->where('estado', true))
-                    ->required(),
+                Forms\Components\Textarea::make('descripcion')
+                    ->maxLength(65535)
+                    ->columnSpanFull(),
                 Forms\Components\Toggle::make('estado')
                     ->required(),
             ]);
@@ -39,11 +38,8 @@ class ZonaResource extends Resource
     {
         return $table
             ->columns([
-
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('caja.nombre')
-                    ->numeric(),
                 Tables\Columns\IconColumn::make('estado')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -73,9 +69,9 @@ class ZonaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListZonas::route('/'),
-            'create' => Pages\CreateZona::route('/create'),
-            'edit' => Pages\EditZona::route('/{record}/edit'),
+            'index' => Pages\ListAreas::route('/'),
+            'create' => Pages\CreateArea::route('/create'),
+            'edit' => Pages\EditArea::route('/{record}/edit'),
         ];
     }
 }

@@ -17,26 +17,31 @@ class SucursalResource extends Resource
 {
     protected static ?string $model = Sucursal::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('empresa_id')
-                    ->required()
-                    ->numeric(),
+
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('tipo_establecimiento')
+                Forms\Components\Select::make('empresa_id')
+                    ->relationship('empresa', 'nombre')
+                    ->required(),
+                Forms\Components\Select::make('tipo_establecimiento')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('fecha_inicio_operaciones')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('fecha_final_operaciones')
-                    ->maxLength(255),
+                    ->options(
+                        [
+                            'Empresa productora' => 'Empresa productora',
+                            'Otros' => 'Otros'
+                        ]
+                    ),
+                Forms\Components\DatePicker::make('fecha_inicio_operaciones')
+                    ->required(),
+                Forms\Components\DatePicker::make('fecha_final_operaciones')
+                    ->required(),
                 Forms\Components\TextInput::make('direccion')
                     ->required()
                     ->maxLength(255),
@@ -54,11 +59,11 @@ class SucursalResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('empresa_id')
-                    ->numeric()
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('empresa.nombre')
+                    ->numeric(),
                 Tables\Columns\TextColumn::make('tipo_establecimiento')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fecha_inicio_operaciones')
@@ -85,11 +90,6 @@ class SucursalResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

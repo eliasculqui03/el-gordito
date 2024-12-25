@@ -17,18 +17,19 @@ class CajaResource extends Resource
 {
     protected static ?string $model = Caja::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('sucursal_id')
-                    ->required()
-                    ->numeric(),
+
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('sucursal_id')
+                    ->relationship('sucursal', 'nombre')
+                    ->required(),
                 Forms\Components\Toggle::make('estado')
                     ->required(),
             ]);
@@ -38,11 +39,11 @@ class CajaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('sucursal_id')
-                    ->numeric()
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('sucursal.nombre')
+                    ->numeric(),
                 Tables\Columns\IconColumn::make('estado')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -59,11 +60,7 @@ class CajaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+
             ]);
     }
 
