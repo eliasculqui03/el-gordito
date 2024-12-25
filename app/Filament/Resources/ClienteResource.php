@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SucursalResource\Pages;
-use App\Filament\Resources\SucursalResource\RelationManagers;
-use App\Models\Sucursal;
+use App\Filament\Resources\ClienteResource\Pages;
+use App\Filament\Resources\ClienteResource\RelationManagers;
+use App\Models\Cliente;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SucursalResource extends Resource
+class ClienteResource extends Resource
 {
-    protected static ?string $model = Sucursal::class;
+    protected static ?string $model = Cliente::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -26,28 +26,21 @@ class SucursalResource extends Resource
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('empresa_id')
-                    ->relationship('empresa', 'nombre')
-                    ->required(),
-                Forms\Components\Select::make('tipo_establecimiento')
-                    ->required()
-                    ->options([
-                        'Servicios' => 'Servicios',
-                        'Otros' => 'Otros'
-                    ]),
-                Forms\Components\DatePicker::make('fecha_inicio_operaciones')
-                    ->required(),
-                Forms\Components\DatePicker::make('fecha_final_operaciones')
-                    ->required(),
-                Forms\Components\TextInput::make('direccion')
+                Forms\Components\TextInput::make('tipo_documento')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('numero_documento')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('edad')
+                    ->numeric(),
                 Forms\Components\TextInput::make('telefono')
                     ->tel()
-                    ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('correo')
-                    ->required()
+                Forms\Components\TextInput::make('email')
+                    ->email()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('direccion')
                     ->maxLength(255),
             ]);
     }
@@ -58,20 +51,18 @@ class SucursalResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('empresa.nombre')
-                    ->searchable()
-                    ->numeric(),
-                Tables\Columns\TextColumn::make('tipo_establecimiento')
+                Tables\Columns\TextColumn::make('tipo_documento')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('fecha_inicio_operaciones')
+                Tables\Columns\TextColumn::make('numero_documento')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('fecha_final_operaciones')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('direccion')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('edad')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('telefono')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('correo')
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('direccion')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -87,6 +78,11 @@ class SucursalResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
@@ -100,9 +96,9 @@ class SucursalResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSucursals::route('/'),
-            'create' => Pages\CreateSucursal::route('/create'),
-            'edit' => Pages\EditSucursal::route('/{record}/edit'),
+            'index' => Pages\ListClientes::route('/'),
+            'create' => Pages\CreateCliente::route('/create'),
+            'edit' => Pages\EditCliente::route('/{record}/edit'),
         ];
     }
 }

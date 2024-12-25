@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AreaResource\Pages;
-use App\Filament\Resources\AreaResource\RelationManagers;
-use App\Models\Area;
+use App\Filament\Resources\PlatoResource\Pages;
+use App\Filament\Resources\PlatoResource\RelationManagers;
+use App\Models\Plato;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AreaResource extends Resource
+class PlatoResource extends Resource
 {
-    protected static ?string $model = Area::class;
+    protected static ?string $model = Plato::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -23,7 +23,14 @@ class AreaResource extends Resource
     {
         return $form
             ->schema([
+
                 Forms\Components\TextInput::make('nombre')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Select::make('area_id')
+                    ->relationship('area', 'nombre')
+                    ->required(),
+                Forms\Components\TextInput::make('categoria')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('descripcion')
@@ -38,7 +45,12 @@ class AreaResource extends Resource
     {
         return $table
             ->columns([
+
                 Tables\Columns\TextColumn::make('nombre')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('area.nombre')
+                    ->numeric(),
+                Tables\Columns\TextColumn::make('categoria')
                     ->searchable(),
                 Tables\Columns\IconColumn::make('estado')
                     ->boolean(),
@@ -69,9 +81,9 @@ class AreaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAreas::route('/'),
-            'create' => Pages\CreateArea::route('/create'),
-            'edit' => Pages\EditArea::route('/{record}/edit'),
+            'index' => Pages\ListPlatos::route('/'),
+            'create' => Pages\CreatePlato::route('/create'),
+            'edit' => Pages\EditPlato::route('/{record}/edit'),
         ];
     }
 }

@@ -17,18 +17,17 @@ class ZonaResource extends Resource
 {
     protected static ?string $model = Zona::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('caja_id')
-                    ->relationship('caja', 'nombre', fn($query) => $query->where('estado', true))
+                    ->relationship('caja', 'nombre')
                     ->required(),
                 Forms\Components\Toggle::make('estado')
                     ->required(),
@@ -39,7 +38,6 @@ class ZonaResource extends Resource
     {
         return $table
             ->columns([
-
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('caja.nombre')

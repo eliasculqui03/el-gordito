@@ -9,6 +9,7 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateSucursal extends CreateRecord
 {
     protected static string $resource = SucursalResource::class;
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index'); // Redirige a la tabla

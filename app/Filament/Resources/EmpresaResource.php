@@ -17,13 +17,12 @@ class EmpresaResource extends Resource
 {
     protected static ?string $model = Empresa::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
@@ -45,11 +44,12 @@ class EmpresaResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('logo')
-
-                    ->required()
-                    ->directory('image')
+                    ->label('Logo de la empresa')
                     ->image()
-                    ->maxSize(1024),
+                    ->disk('public')
+                    ->directory('images')
+                    ->maxSize(1024)
+                    ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
@@ -61,19 +61,20 @@ class EmpresaResource extends Resource
                 Forms\Components\TextInput::make('direccion')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('moneda')
+                Forms\Components\Select::make('moneda')
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        'Nuevos Soles' => 'Nuevos Soles',
+                        'Dolares Americanos' => 'Dolares Americanos',
+                        'Otros' => 'Otros'
+                    ]),
                 Forms\Components\Textarea::make('mision')
-                    ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('vision')
-                    ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('descripcion')
-                    ->required()
                     ->maxLength(65535)
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('facebook')
@@ -99,8 +100,7 @@ class EmpresaResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('fecha_ingreso_gerente')
-                    ->required()
-
+                    ->required(),
             ]);
     }
 
@@ -108,7 +108,6 @@ class EmpresaResource extends Resource
     {
         return $table
             ->columns([
-
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tipo_actividad')

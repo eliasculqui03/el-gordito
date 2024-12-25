@@ -10,8 +10,8 @@ class Empresa extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'tipo_actividad',
         'nombre',
+        'tipo_actividad',
         'ruc',
         'nombre_comercial',
         'numero_decreto',

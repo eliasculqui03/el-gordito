@@ -17,7 +17,7 @@ class CajaResource extends Resource
 {
     protected static ?string $model = Caja::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -60,7 +60,6 @@ class CajaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-
             ]);
     }
 

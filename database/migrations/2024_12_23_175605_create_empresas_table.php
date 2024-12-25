@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('empresas', function (Blueprint $table) {
             $table->id();
-            $table->string('tipo_actividad');
             $table->string('nombre');
+            $table->string('tipo_actividad');
             $table->string('ruc');
             $table->string('nombre_comercial');
             $table->string('numero_decreto');
@@ -23,9 +23,9 @@ return new class extends Migration
             $table->string('telefono');
             $table->string('direccion');
             $table->string('moneda');
-            $table->text('mision');
-            $table->text('vision');
-            $table->text('descripcion');
+            $table->text('mision')->nullable();
+            $table->text('vision')->nullable();
+            $table->text('descripcion')->nullable();
             $table->string('facebook')->nullable();
             $table->string('youtube')->nullable();
             $table->string('whatsapp')->nullable();
