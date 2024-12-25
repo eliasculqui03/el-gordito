@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('zonas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->foreignId('caja_id')->constrained('cajas')->onDelete('cascade');
+            $table->foreignId('caja_id')->onDelete('cascade');
             $table->boolean('estado');
             $table->timestamps();
         });
