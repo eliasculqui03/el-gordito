@@ -28,8 +28,14 @@ class EliasculquiPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#dda73a', // Color principal (botones, enlaces, etc.)
+
             ])
+            ->globalSearch()
+            ->sidebarCollapsibleOnDesktop()
+            
+            ->brandLogo(asset('images/logo.jpg')) // Icono en la esquina superior izquierda
+            ->brandLogoHeight('4rem')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -37,8 +43,7 @@ class EliasculquiPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+           
             ])
             ->middleware([
                 EncryptCookies::class,

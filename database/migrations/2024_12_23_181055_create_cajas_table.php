@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->foreignId('sucursal_id')->onDelete('cascade');
-            $table->boolean('estado');
+            $table->boolean('estado')->nullable();
             $table->timestamps();
         });
     }
