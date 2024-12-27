@@ -6,20 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Zona extends Model
+class Plato extends Model
 {
     use HasFactory;
     protected $fillable = [
         'nombre',
-        'caja_id',
-        'estado',
+        'categoria',
+        'area_id',
+        'descripcion',
+        'estado'
     ];
 
-    /**
-     * Relación con el modelo Caja.
-     */
-    public function caja(): BelongsTo
+    public function area(): BelongsTo
     {
-        return $this->belongsTo(Caja::class);
+        return $this->belongsTo(Area::class);
     }
 }

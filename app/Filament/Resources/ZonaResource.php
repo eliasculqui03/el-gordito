@@ -23,12 +23,12 @@ class ZonaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('caja_id')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\TextInput::make('nombre')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('caja_id')
+                    ->relationship('caja', 'nombre')
+                    ->required(),
                 Forms\Components\Toggle::make('estado')
                     ->required(),
             ]);
@@ -38,11 +38,10 @@ class ZonaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('caja_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('nombre')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('caja.nombre')
+                    ->numeric(),
                 Tables\Columns\IconColumn::make('estado')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -59,11 +58,6 @@ class ZonaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

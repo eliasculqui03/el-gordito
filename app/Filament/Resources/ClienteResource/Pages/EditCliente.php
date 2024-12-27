@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\CajaResource\Pages;
+namespace App\Filament\Resources\ClienteResource\Pages;
 
-use App\Filament\Resources\CajaResource;
+use App\Filament\Resources\ClienteResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditCaja extends EditRecord
+class EditCliente extends EditRecord
 {
-    protected static string $resource = CajaResource::class;
+    protected static string $resource = ClienteResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -16,7 +16,6 @@ class EditCaja extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index'); // Redirige a la tabla

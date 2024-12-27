@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Empresa extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'tipo_actividad',
         'nombre',
+        'tipo_actividad',
         'ruc',
         'nombre_comercial',
         'numero_decreto',
@@ -32,4 +33,9 @@ class Empresa extends Model
         'direccion_gerente',
         'fecha_ingreso_gerente',
     ];
+
+    public function Sucursals(): HasMany
+    {
+        return $this->hasMany(Sucursal::class);
+    }
 }

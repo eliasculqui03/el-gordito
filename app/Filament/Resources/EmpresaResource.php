@@ -133,9 +133,9 @@ class EmpresaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('tipo_actividad')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('nombre')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tipo_actividad')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('ruc')
                     ->searchable(),
@@ -185,11 +185,6 @@ class EmpresaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
