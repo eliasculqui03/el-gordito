@@ -27,7 +27,9 @@ class ZonaResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('caja_id')
-                    ->relationship('caja', 'nombre')
+                    ->relationship('caja', 'nombre', function ($query) {
+                        $query->where('estado', true); // Filtra las cajas activas
+                    })
                     ->required(),
                 Forms\Components\Toggle::make('estado')
                     ->required(),

@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -23,14 +24,61 @@ class ClienteResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nombre')
+                Forms\Components\Select::make('tipo_documento')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('tipo_documento')
-                    ->required()
-                    ->maxLength(255),
+                    ->options([
+                        'DNI' => 'DNI',
+                        'CE' => 'CE'
+                    ]),
                 Forms\Components\TextInput::make('numero_documento')
                     ->required()
+                    ->maxLength(8)
+                    ->suffixAction(
+                        Forms\Components\Actions\Action::make('buscarDni')
+                            ->icon('heroicon-o-magnifying-glass')
+                            ->action(function (Forms\Set $set, $state) {
+                                if (strlen($state) === 8) {
+                                    $token = 'apis-token-12378.4HGOhTQkQu5n4kj0Zl1qX1Un87malHiI';
+                                    $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
+
+                                    $parameters = [
+                                        'http_errors' => false,
+                                        'connect_timeout' => 5,
+                                        'headers' => [
+                                            'Authorization' => 'Bearer ' . $token,
+                                            'Referer' => 'https://apis.net.pe/api-consulta-dni',
+                                            'User-Agent' => 'laravel/guzzle',
+                                            'Accept' => 'application/json',
+                                        ],
+                                        'query' => ['numero' => $state]
+                                    ];
+
+                                    try {
+                                        // Realizar la solicitud
+                                        $res = $client->request('GET', '/v2/reniec/dni', $parameters);
+                                        $response = json_decode($res->getBody()->getContents(), true);
+
+                                        // Verificar y establecer datos en el formulario
+                                        if (isset($response['numeroDocumento'])) {
+                                            $set('nombre', $response['nombres'] . ' ' . $response['apellidoPaterno'] . ' ' . $response['apellidoMaterno']);
+                                        } else {
+                                            $set('nombre', 'No encontrado');
+                                            $set('appaterno', 'No encontrado');
+                                            $set('apmaterno', 'No encontrado');
+                                        }
+                                    } catch (\Exception $e) {
+                                        // Manejar errores de la solicitud
+                                        $set('nombre', 'Error al conectar');
+                                    }
+                                } else {
+                                    // Mostrar un mensaje de error si el número de documento no es válido
+                                    $set('nombre', 'Número de documento inválido');
+                                }
+                            })
+                    ),
+                Forms\Components\TextInput::make('nombre')
+                    ->required()
+
                     ->maxLength(255),
                 Forms\Components\TextInput::make('edad')
                     ->numeric(),
@@ -56,8 +104,7 @@ class ClienteResource extends Resource
                 Tables\Columns\TextColumn::make('numero_documento')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('edad')
-                    ->numeric()
-                    ->sortable(),
+                    ->numeric(),
                 Tables\Columns\TextColumn::make('telefono')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
@@ -78,11 +125,6 @@ class ClienteResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

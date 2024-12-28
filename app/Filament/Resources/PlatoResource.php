@@ -28,11 +28,16 @@ class PlatoResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('area_id')
-                    ->relationship('area', 'nombre')
+                    ->relationship('area', 'nombre', function ($query) {
+                        $query->where('estado', true);
+                    })
                     ->required(),
-                Forms\Components\TextInput::make('categoria')
+                Forms\Components\Select::make('categoria')
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        'Plato' => 'Plato',
+                        'Bebida' => 'Bebida'
+                    ]),
                 Forms\Components\Textarea::make('descripcion')
                     ->maxLength(65535)
                     ->columnSpanFull(),
