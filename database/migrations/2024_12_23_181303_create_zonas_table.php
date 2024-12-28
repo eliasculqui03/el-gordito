@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('zonas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->unsignedBigInteger('caja_id');
-            $table->foreign('caja_id')->references('id')->on('cajas');
-            $table->boolean('estado');
+            $table->foreignId('caja_id')->onDelete('cascade');
+            $table->boolean('estado')->nullable();
             $table->timestamps();
         });
     }

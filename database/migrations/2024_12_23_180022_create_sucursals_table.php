@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('tipo_establecimiento');
             $table->string('fecha_inicio_operaciones');
             $table->string('fecha_final_operaciones')->nullable();
-            $table->string('direccion');
-            $table->string('telefono');
-            $table->string('correo');
+            $table->string('direccion')->nullable();
+            $table->string('telefono')->nullable();
+            $table->string('correo')->nullable();
             $table->timestamps();
         });
     }
