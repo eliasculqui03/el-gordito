@@ -21,33 +21,45 @@ class UnidadMedidaResource extends Resource
 
     public static function form(Form $form): Form
     {
+        
         return $form
-            ->schema([
-                //
-                Forms\Components\TextInput::make('descripcion')
-                                    ->required()
-                                    ->maxLength(255),
+        ->schema([
+            Forms\Components\TextInput::make('descripcion')
+                ->label('Descripción')
+                ->required()
+                ->maxLength(255),
 
+            Forms\Components\Toggle::make('estado')
+                ->label('Activo')
+                ->default(true),
+        
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+        ->columns([
+            Tables\Columns\TextColumn::make('descripcion')
+                ->label('Descripción')
+                ->sortable()
+                ->searchable(),
+
+                Tables\Columns\IconColumn::make('estado')
+                ->label('Estado')
+                ->boolean(),
+        ])
+        ->filters([
+            Tables\Filters\Filter::make('activo')
+                ->label('Solo activos')
+                ->query(fn (Builder $query) => $query->where('estado', true)),
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
